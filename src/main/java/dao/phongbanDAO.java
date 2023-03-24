@@ -3,6 +3,7 @@ import connection.MyConnection;
 import model.nhanvien;
 import model.phongban;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class phongbanDAO {
                 p.setMaPB(rs.getString("MaPB"));
                 p.setTenPB(rs.getString("TenPB"));
                 p.setDiachiPB(rs.getString("DiachiPB"));
+                p.setSdtPB(rs.getString("SdtPB"));
                 phongbanList.add(p);
             }
             rs.close();
@@ -40,8 +42,8 @@ public class phongbanDAO {
         return phongbanList;
     }
 
-    public phongban getById( String MaPB){
-        final String sql = "select * from `phongban` where `MaPB`=" + MaPB;
+    public static phongban getById(String MaPB){
+        final String sql = String.format("select * from `phongban` where MaPB = '%s'", MaPB);
         phongban p = null;
 
         try {
@@ -55,6 +57,7 @@ public class phongbanDAO {
                 p.setMaPB(rs.getString("MaPB"));
                 p.setTenPB(rs.getString("TenPB"));
                 p.setDiachiPB(rs.getString("DiachiPB"));
+                p.setSdtPB(rs.getString("SdtPB"));
             }
             rs.close();
             stmt.close();
@@ -91,7 +94,7 @@ public class phongbanDAO {
                 nv.setNgaySinh(rs.getString("NgaySinh"));
                 nv.setSdt(rs.getString("Sdt"));
                 nv.setChucvu(rs.getString("Chucvu"));
-                nv.setLuongCV(rs.getFloat("LuongCV"));
+                nv.setLuongCV(rs.getInt("LuongCV"));
                 nv.setMaPB(rs.getString("MaPB"));
                 nv.setNguoiQL(rs.getString("NguoiQL"));
                 nv.setBacLuong(rs.getInt("BacLuong"));
@@ -107,9 +110,9 @@ public class phongbanDAO {
         return nhanvienList;
     }
 
-    public void insert (phongban phongban){
-        final String sql= String.format("insert into `phongban` values (`%s`,`%s`,`%s`,`%s`)",
-                phongban.getMaPB(), phongban.getTenPB(), phongban.getDiachiPB(), phongban.getSdtPB());
+    public static void insert(phongban p){
+        final String sql= String.format("insert into `phongban` values ('%s','%s','%s','%s')",
+                p.getMaPB(), p.getTenPB(), p.getDiachiPB(), p.getSdtPB());
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -126,14 +129,15 @@ public class phongbanDAO {
         }
     }
 
-    public void update(phongban phongban, String MaPB){
-        phongban p = getById(MaPB);
+
+    public static void update(phongban p, String MaPB){
+        phongban tmpPB = getById(MaPB);
         if( p == null){
             throw new RuntimeException("phòng ban không tồn tại!");
         }
         final String sql = String.format(
-                "update `phongban` set `MaPB`=`%s`,`TenPB`=`%s`,`DiachiPB`=`%s`,`SdtPB`=`%s`  WHERE `MaPB` = '%s'",
-                phongban.getMaPB(), phongban.getTenPB(), phongban.getDiachiPB(), phongban.getSdtPB(),MaPB
+                "update `phongban` set `MaPB`='%s',`TenPB`='%s',`DiachiPB`='%s',`SdtPB`=%s  WHERE `MaPB` = '%s'",
+                p.getMaPB(), p.getTenPB(), p.getDiachiPB(), p.getSdtPB(),MaPB
         );
         try {
             Connection conn = MyConnection.getConnection();
@@ -150,8 +154,79 @@ public class phongbanDAO {
         }
 
     }
+    public void removeEmployeeByDeptID() {
+        String sql = "DELETE from phongban WHERE id = ?";
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
+
+
+            if (rs == 0) {
+                System.out.println("Xóa thất bại");
+            }
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
+    public static void delete(String id)
+    {
+        phongban d = getById(id);
+        if (d == null) {
+            System.out.println("loi");
+            throw new RuntimeException("id không tồn tại!");
+
+        }
+
+        final String sql =
+                "SELECT count(*) as checksl FROM nhanvien where MaPB=?";
+        try{
+            Connection conn = MyConnection.getConnection();
+            PreparedStatement st = (PreparedStatement) conn
+                    .prepareStatement(sql);
+            st.setString(1,id);
+
+            ResultSet rs = st.executeQuery();
+            int checknv=0;
+            if (rs.next()) {
+                checknv= rs.getInt("checksl");
+
+            }
+            if(checknv>0)
+            {
+                System.out.println("còn tồn tại nhân viên trong phòng ban \n yêu cầu chuyển nhân viên qua phòng ban khác rồi mới đc xóa");
+            }else if(checknv==0)
+            {
+                String sql1= "delete from phongban where MaPB=?";
+                try{
+                    PreparedStatement st1 = (PreparedStatement) conn
+                            .prepareStatement(sql1);
+                    st1.setString(1,id);
+                    long rs1 = st1.executeUpdate();
+
+                    if (rs1 == 0) {
+                        System.out.println("Cập nhật thất bại");
+                    }
+                    st.close();
+                    conn.close();
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    }
+
 
 
 

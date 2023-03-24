@@ -8,7 +8,7 @@ public class nhanvien {
     private String NgaySinh;
     private String Sdt;
     private String Chucvu;
-    private float LuongCV;
+    private int LuongCV;
 
     private String MaPB;
     private String NguoiQL;
@@ -17,7 +17,7 @@ public class nhanvien {
     public nhanvien() {
     }
 
-    public nhanvien(String maNV, String hoTen, String email, String ngayvaolam, String ngaySinh, String sdt, String chucvu, float luongCV, String maPB, String nguoiQL, int bacLuong) {
+    public nhanvien(String maNV, String hoTen, String email, String ngayvaolam, String ngaySinh, String sdt, String chucvu, int luongCV, String maPB, String nguoiQL, int bacLuong) {
         MaNV = maNV;
         HoTen = hoTen;
         Email = email;
@@ -31,7 +31,7 @@ public class nhanvien {
         BacLuong = bacLuong;
     }
 
-    public nhanvien(String hoTen, String email, String ngayvaolam, String ngaySinh, String sdt, String chucvu, float luongCV, String maPB, String nguoiQL, int bacLuong) {
+    public nhanvien(String hoTen, String email, String ngayvaolam, String ngaySinh, String sdt, String chucvu, int luongCV, String maPB, String nguoiQL, int bacLuong) {
         HoTen = hoTen;
         Email = email;
         Ngayvaolam = ngayvaolam;
@@ -100,11 +100,11 @@ public class nhanvien {
         Chucvu = chucvu;
     }
 
-    public float getLuongCV() {
+    public int getLuongCV() {
         return LuongCV;
     }
 
-    public void setLuongCV(float luongCV) {
+    public void setLuongCV(int luongCV) {
         LuongCV = luongCV;
     }
 
@@ -134,18 +134,18 @@ public class nhanvien {
 
     @Override
     public String toString() {
-        return "nhanvien{" +
+        return "nhanvien [  " +
                 "MaNV='" + MaNV + '\'' +
-                ", HoTen='" + HoTen + '\'' +
-                ", Email='" + Email + '\'' +
-                ", Ngayvaolam='" + Ngayvaolam + '\'' +
-                ", NgaySinh='" + NgaySinh + '\'' +
-                ", Sdt='" + Sdt + '\'' +
-                ", Chucvu='" + Chucvu + '\'' +
-                ", LuongCV=" + LuongCV +
-                ", MaPB='" + MaPB + '\'' +
-                ", NguoiQL='" + NguoiQL + '\'' +
-                ", BacLuong=" + BacLuong +
-                '}';
+                ", HoTen ='" + HoTen + '\'' +
+                ", Email ='" + Email + '\'' +
+                ", Ngayvaolam ='" + Ngayvaolam + '\'' +
+                ", NgaySinh ='" + NgaySinh + '\'' +
+                ", Sdt ='" + Sdt + '\'' +
+                ", Chucvu ='" + Chucvu + '\'' +
+                ", LuongCV =" + LuongCV +
+                ", MaPB ='" + MaPB + '\'' +
+                ", NguoiQL ='" + NguoiQL + '\'' +
+                ", BacLuong =" + BacLuong +
+                ']';
     }
 }

@@ -29,7 +29,7 @@ public class nhanvienDAO {
                 nv.setNgaySinh(rs.getString("NgaySinh"));
                 nv.setSdt(rs.getString("Sdt"));
                 nv.setChucvu(rs.getString("Chucvu"));
-                nv.setLuongCV(rs.getFloat("LuongCV"));
+                nv.setLuongCV(rs.getInt("LuongCV"));
                 nv.setMaPB(rs.getString("MaPB"));
                 nv.setNguoiQL(rs.getString("NguoiQL"));
                 nv.setBacLuong(rs.getInt("BacLuong"));
@@ -44,8 +44,8 @@ public class nhanvienDAO {
         return nhanvienList;
     }
 
-    public nhanvien getById(String MaNV) {
-        final String sql = "select * from `nhanvien` where `MaNV`="+MaNV;
+    public static nhanvien getById(String MaNV) {
+        final String sql = String.format("select * from `nhanvien` where MaNV = '%s'", MaNV);
         nhanvien nv = null;
         try{
         Connection conn = MyConnection.getConnection();
@@ -60,7 +60,7 @@ public class nhanvienDAO {
             nv.setNgaySinh(rs.getString("NgaySinh"));
             nv.setSdt(rs.getString("Sdt"));
             nv.setChucvu(rs.getString("Chucvu"));
-            nv.setLuongCV(rs.getFloat("LuongCV"));
+            nv.setLuongCV(rs.getInt("LuongCV"));
             nv.setMaPB(rs.getString("MaPB"));
             nv.setNguoiQL(rs.getString("NguoiQL"));
             nv.setBacLuong(rs.getInt("BacLuong"));
@@ -75,7 +75,7 @@ public class nhanvienDAO {
     }
 
     public static void insert(nhanvien nv){
-        final String sql = String.format("insert into `nhanvien` values ('%s','%s','%s','%s','%s','%s','%s','%f','%s','%s','%d')",
+        final String sql = String.format("insert into `nhanvien` values ('%s','%s','%s','%s','%s','%s','%s','%d','%s','%s','%d')",
                 nv.getMaNV(), nv.getHoTen(), nv.getEmail(), nv.getNgayvaolam(), nv.getNgaySinh(), nv.getSdt(),nv.getChucvu(),nv.getLuongCV(),nv.getMaPB(),nv.getNguoiQL(),nv.getBacLuong()
         );
         try {
@@ -93,14 +93,15 @@ public class nhanvienDAO {
             e.printStackTrace();
         }
     }
-    public void update( nhanvien nhanvien, String MaNV){
-        nhanvien tmp = getById(MaNV);
+    public static void update(nhanvien nv, String ma){
+        nhanvien tmp = getById(ma);
         if(tmp == null){
-            throw new RuntimeException("Nhân viên không tồn tại!");
+            System.out.println("Không tồn tại nhân viên có ma =" + ma);
+            return;
         }
 
-        final String sql = String.format("update`nhanvien` set `MaNV`='%s',`HoTen`='%s',`Email`='%s',`Ngayvaolam`='%s',`Sdt`='%s',`Chucvu`='%s',`LuongCV`='%f',`MaPB`='%s',`NguoiQL`='%s',`BacLuong`='%d' where `MaNV`=`%s`",
-                nhanvien.getMaNV(), nhanvien.getHoTen(),nhanvien.getEmail(),nhanvien.getNgayvaolam(), nhanvien.getSdt(),nhanvien.getChucvu(),nhanvien.getLuongCV(),nhanvien.getMaPB(),nhanvien.getNguoiQL(),nhanvien.getBacLuong(),MaNV
+        final String sql = String.format("update`nhanvien` set `HoTen`='%s',`Email`='%s',`Ngayvaolam`='%s',`Sdt`='%s',`Chucvu`='%s',`LuongCV`='%d',`MaPB`='%s',`NguoiQL`='%s',`BacLuong`='%d' where `MaNV`='%s'",
+                 nv.getHoTen(),nv.getEmail(),nv.getNgayvaolam(), nv.getSdt(),nv.getChucvu(),nv.getLuongCV(),nv.getMaPB(),nv.getNguoiQL(),nv.getBacLuong(),ma
         );
         try {
             Connection conn = MyConnection.getConnection();
@@ -117,12 +118,12 @@ public class nhanvienDAO {
         }
         }
 
-        public void delete(String MaNV){
-        nhanvien nhanvien = getById(MaNV);
-        if(nhanvien == null){
+        public static void delete(String MaNV){
+        nhanvien nv = getById(MaNV);
+        if(nv == null){
             throw new RuntimeException("Nhân viên không tồn tại!");
         }
-        final String sql = "delete from `nhanvien` where `MaNV` = " + MaNV;
+        final String sql = String.format( "delete from `nhanvien` where `MaNV` = '%s'", MaNV);
             try {
                 Connection conn = MyConnection.getConnection();
                 Statement stmt = conn.createStatement();

@@ -1,51 +1,41 @@
 package dao;
 
+import connection.MyConnection;
+import model.nhanvien;
+import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.Statement;
+
 public class luongDAO {
-    private int BacLuong;
-    private float LuongCB;
-    private float PhuCap;
+    final double phanTramThue = 0.15d;
+    long tienLuongNhan;
+    double tienLuongThucTe, thueThuNhap;
+    /*Scanner in = new Scanner(System.in);
+     //tính thuế thu nhập = 15% lương được nhận
+    thueThuNhap = tienLuongNhan * 0.15;
 
-    public luongDAO() {
-    }
+    //tiền lương thực tế sau khi đóng thuế = tiền lương nhận - thuế thu nhập
+    tienLuongThucTe = tienLuongNhan - thueThuNhap;
 
-    public luongDAO(int bacLuong, float luongCB, float phuCap) {
-        BacLuong = bacLuong;
-        LuongCB = luongCB;
-        PhuCap = phuCap;
-    }
+    public static int luongDuocNhan(nhanvien nv){
+        nhanvien nv = get;
+        if(nv == null){
+            throw new RuntimeException("Nhân viên không tồn tại!");
+        }
+        final String sql = String.format( "delete from `nhanvien` where `MaNV` = '%s'", MaNV);
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
 
-    public int getBacLuong() {
-        return BacLuong;
-    }
+            if (rs == 0) {
+                System.out.println("Xoá thất bại");
+            }
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
 
-    public void setBacLuong(int bacLuong) {
-        BacLuong = bacLuong;
-    }
-
-    public float getLuongCB() {
-        return LuongCB;
-    }
-
-    public void setLuongCB(float luongCB) {
-        LuongCB = luongCB;
-    }
-
-    public float getPhuCap() {
-        return PhuCap;
-    }
-
-    public void setPhuCap(float phuCap) {
-        PhuCap = phuCap;
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "luongDAO{" +
-                "BacLuong=" + BacLuong +
-                ", LuongCB=" + LuongCB +
-                ", PhuCap=" + PhuCap +
-                '}';
-    }
 }
